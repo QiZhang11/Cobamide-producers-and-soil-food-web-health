@@ -1,0 +1,42 @@
+wd<- "C:/Users/plant/Desktop"
+setwd(wd)
+
+library(ggplot2)
+library(dplyr)
+library(hrbrthemes)
+library(viridis)
+library(gapminder)
+
+# open file
+data = read.delim("AA.txt")
+
+ggplot(data, aes(x=x, y=Description, size = group)) +
+  geom_point(alpha=0.7)
+
+data %>%
+  arrange(data) %>%
+  ggplot(aes(x=x, y=Description, size = group, color=y)) +
+  geom_point(alpha=0.5) +
+  scale_size(range = c(1, 10), name="Population (M)")+
+  scale_fill_viridis(discrete=TRUE, guide=FALSE, option="A") +
+  theme_ipsum() +
+  ylab("KEGG") +
+  xlab("Rich factor") +
+  theme(legend.position = "none")
+
+data %>%
+  arrange(data) %>%
+  ggplot(aes(x=x, y=Description)) +
+  geom_point(aes(size=group, fill=y), alpha=0.5, shape=21) +
+  scale_size(range = c(1, 10), name="Population (M)") +
+  scale_fill_viridis(discrete=FALSE, option="R") +
+  ylab("KEGG") +
+  xlab("Rich factor") +
+  theme_bw()
+
+p1<-ggplot(data,aes(x=x, y=Description)) +
+  geom_point(aes(size=group, fill=y), alpha=0.5, shape=21, color="black")+
+#geom_smooth(method = loess) +
+  scale_fill_viridis(discrete=TRUE, guide=FALSE, option="A")+
+  theme_bw()
+p1
