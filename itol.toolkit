@@ -1,0 +1,34 @@
+library(itol.toolkit)
+library(data.table)
+library(dplyr)
+
+tree_1 <- "RNA_II.nwk"
+hub_1 <- create_hub(tree_1)
+data_file_1 <- "metadata-RNR.txt"
+data_1 <- data.table::fread(data_file_1)
+
+# relabel by genus
+unit_1 <- create_unit(data = data_1 %>% select(ID, Genus), 
+                      key = "RNA_II1", 
+                      type = "LABELS",
+                      tree = tree_1)
+
+# tree_colors range by phylum
+unit_2 <- create_unit(data = data_1 %>% select(ID, Class), 
+                      key = "RNA_II2", 
+                      type = "TREE_COLORS", 
+                      subtype = "range", 
+                      tree = tree_1)
+set.seed(123)
+unit_3 <- create_unit(data = data_1 %>% select(ID, ET), 
+                      key = "RNA_II3",
+                      type = "DATASET_COLORSTRIP",
+                      color = "wesanderson",
+                      tree = tree_1)
+unit_3@common_themes$basic_theme$margin <- 50
+
+hub_1 <- hub_1 + 
+  unit_1 + 
+  unit_2 +
+  unit_3
+write_hub(hub_1,getwd())
