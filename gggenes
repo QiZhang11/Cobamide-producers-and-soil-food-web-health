@@ -1,0 +1,15 @@
+install.packages("gggenes")
+wd<- "C:/Users/zhangqi/Desktop"
+setwd(wd)
+data <- read.table('genome2.txt', sep="\t", header=T)
+library(ggplot2)
+library(gggenes)
+ggplot(data, aes(xmin = start, xmax = end,
+                 y = molecule, fill = gene, label = gene, forward = direction)) + 
+  geom_gene_arrow(arrowhead_height = unit(3, "mm"), arrowhead_width = unit(1, "mm")) + 
+  facet_wrap(~ molecule, scales = "free", ncol = 1) +  scale_fill_manual(values=c("#c10023", "#008e17", "#fb8500", "#f60000", "#FE0092", "#bc9000","#4ffc00", "#00bcac", "#0099cc",
+"#D35400", "#00eefd", "#cf6bd6", "#99cc00", "#aa00ff", "#ff00ff", "#00896e",
+"#f2a287","#ffb3ff", "#800000", "#77a7b7", "#0053c8", "#00cc99", "#007CC8","#56B4E6","#99cc80","#fb8580")) + 
+  theme_genes() + geom_gene_label(align = "left")
+ 
+                  
