@@ -62,13 +62,13 @@ for archae: for i in ${ID[@]};do barrnap --quiet -k arc /arc_mag/${i}.fa --outse
 phylophlan -i 4340faa -d phylophlan --diversity high --accurate --min_num_markers 100 -f /home/user/phylophlan.cfg -o phylophlan --nproc 40 --verbose 2>&1 | tee tree.log
 
 ## Construction of SCP v1.0_16S
-## step1: De-chimerism
+# step1: De-chimerism
 vsearch --uchime_ref your_16S_sequences.fasta --db gold.fasta --nonchimeras cleaned_16S_sequences.fasta
-## step2: Short sequences and low quality sequences were filtered
+# step2: Short sequences and low quality sequences were filtered
 seqtk seq -A -L 1000 cleaned_16S_sequences.fasta > length_filtered_sequences.fasta
-## step3: Low complexity sequences were removed
+# step3: Low complexity sequences were removed
 prinseq-lite.pl -fasta length_filtered_sequences.fasta -min_len 200 -out_good final_16S_sequences -out_bad discarded_sequences
-## step4: Standard database annotation
+# step4: Standard database annotation
 makeblastdb -in SILVA_138.1_SSURef_NR99_tax_silva.fasta -dbtype nucl -out SILVA_138.1_SSURef_NR99_tax_silva
 
 
