@@ -1,0 +1,39 @@
+from Bio import SeqIO
+import sys
+
+def calculate_coverage(sequence, hypervariable_regions):
+    coverage = {}
+    for region_name, region_coords in hypervariable_regions.items():
+        start, end = region_coords
+        region_seq = sequence[start-1:end]
+        coverage[region_name] = len(region_seq) / (end - start + 1)
+    return coverage
+
+def main(input_fasta, output_csv):
+    # Define the coordinates of the 9 hypervariable regions (1-based indexing)
+    hypervariable_regions = {
+        'V1': (8, 99),
+        'V2': (100, 242),
+        'V3': (243, 490),
+        'V4': (491, 755),
+        'V5': (756, 964),
+        'V6': (965, 1045),
+        'V7': (1046, 1174),
+        'V8': (1175, 1389),
+        'V9': (1390, 1541)
+    }
+
+    # Open output CSV file
+    with open(output_csv, 'w') as output_file:
+        output_file.write("Sequence_ID," + ",".join(hypervariable_regions.keys()) + "\n")
+
+        # Parse the input FASTA file
+        for record in SeqIO.parse(input_fasta, "fasta"):
+            sequence = str(record.seq)
+            coverage = calculate_coverage(sequence, hypervariable_regions)
+            output_file.write(f"{record.id}," + ",".join(f"{coverage[region]:.2f}" for region in hypervariable_regions) + "\n")
+
+if __name__ == "__main__":
+    input_fasta = sys.argv[1]
+    output_csv = sys.argv[2]
+    main(input_fasta, output_csv)
